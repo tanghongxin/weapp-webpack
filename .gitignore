@@ -1,5 +1,7 @@
 node_modules
-dist
-.*
+.idea
 .vscode
-*.md
+.DS_Store
+dist/*
+!dist/miniprogram_npm/
+report.html

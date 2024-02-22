@@ -3,62 +3,63 @@ const { resolve } = path
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const WxRuntimeChunk = require('./build/plugins/wxRuntimeChunk')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const SpeedMeasurePlugin = require('speed-measure-webpack-plugin')
+const { getEntries } = require('./build/utils/getEntries')
+const TerserPlugin = require('terser-webpack-plugin')
+const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin")
+const webpack = require('webpack')
 
-const ISPROD = process.env.NODE_ENV === 'production'
-const SRCDIR = resolve(__dirname, 'src')
-const SMP = new SpeedMeasurePlugin()
-const plugins = [
-  new CopyWebpackPlugin({
-    patterns: [
-      {
-        from: '**/*',
-        to: '',
-        globOptions: {
-          ignore: ['**/*.js', '**/*.scss'],
-        },
-      },
-    ],
-  }),
-  new WxRuntimeChunk(),
-]
+const { NODE_ENV } = process.env
+const IS_PROD = NODE_ENV === 'production'
+const SRC_DIR = resolve(__dirname, 'src')
 
 const config = {
-  context: SRCDIR,
-  mode: ISPROD ? 'production' : 'development',
-  // target: 'node',
+  context: SRC_DIR,
+  mode: NODE_ENV,
+  watch: !IS_PROD,
   watchOptions: {
     aggregateTimeout: 500,
     ignored: ['**/node_modules', '**/json'],
     poll: 1000,
   },
-  entry: { app: './app.js' },
+  stats: {
+    errorDetails: true,
+    errorStack: false
+  },
+  entry: getEntries(SRC_DIR, { app: './app.ts' }),
   output: {
     path: resolve(__dirname, 'dist'),
-    filename: ISPROD ? '[contenthash:5].js' : '[name].js',
-    chunkFilename: ISPROD ? 'async_[contenthash:5].js' : 'async_[name].js',
     globalObject: 'wx',
-    clean: true,
+    clean: {
+      keep: /miniprogram_npm/,
+    },
     publicPath: '',
   },
   resolve: {
     alias: {
-      '@': SRCDIR,
+      '@': SRC_DIR,
     },
-    extensions: ['.js', '.json'],
+    extensions: ['.ts', '.js', '.json'],
   },
   resolveLoader: {
-    modules: ['node_modules', 'build/loaders'],
+    modules: ['node_modules'],
   },
   module: {
     rules: [
+      {
+        test: /\.ts?$/,
+        exclude: /node_modules/,
+        use: [
+          'babel-loader',
+          'ts-loader',
+        ],
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
         use: 'babel-loader'
       },
       {
-        test: /\.s(a|c)ss$/,
+        test: /\.less$/,
         include: /src/,
         use: [
           {
@@ -69,7 +70,20 @@ const config = {
             },
           },
           'postcss-loader',
-          'sass-loader',
+          'less-loader',
+        ],
+      },
+      {
+        test: /\.wxss$/,
+        include: /src/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].wxss',
+              context: resolve('src')
+            },
+          },
         ],
       },
       {
@@ -86,8 +100,49 @@ const config = {
       }
     ],
   },
-  plugins,
+  plugins: [
+    new webpack.ProgressPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: '**/*',
+          to: '',
+          globOptions: {
+            ignore: [
+              '**/*.ts',
+              '**/*.js',
+              '**/*.less',
+            ],
+          },
+        },
+      ],
+    }),
+    new WxRuntimeChunk(),
+    ...IS_PROD ? [
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'static',
+        reportFilename: path.resolve(__dirname, 'report.html'),
+        openAnalyzer: false,
+      })
+    ] : [],
+  ],
   optimization: {
+    ...IS_PROD ? {
+      minimize: true,
+      minimizer: [
+        new JsonMinimizerPlugin(),
+        new TerserPlugin({
+          terserOptions: {
+            compress: {
+              drop_console: true,
+            },
+            output: {
+              comments: false,
+            },
+          },
+        }),
+      ],
+    } : {},
     // tree shaking
     usedExports: true,
     // runtime code
@@ -98,30 +153,12 @@ const config = {
     splitChunks: {
       chunks: 'all',
       name: 'common',
-      // code cache
-      cacheGroups: {
-        lottie: {
-          name: 'lottie',
-          test: /[\\/]lottie-miniprogram[\\/]/,
-          priority: 0,
-        },
-      },
     },
-    // moduleIds: ISPROD ? 'deterministic' : 'named',
   },
-  // devtool: 'cheap-source-map',
-  devtool: false,
+  devtool: IS_PROD ? false : 'source-map',
   cache: {
     type: 'filesystem'
   }
 }
 
-// 生产环境剔除console及debug
-// ISPROD && (config.optimization.minimizer = minimizer)
-
-// 构建性能
-// dll thread-loader cache-loader cache
-
-// module.exports = ISPROD ? config : SMP.wrap(config)
-config.entry = require('./build/utils/getEntries')(SRCDIR, config.entry)
 module.exports = config
