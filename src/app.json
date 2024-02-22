@@ -1,22 +1,25 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
     "pages/sub/index"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "weapp-webpack",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "list": [{
-      "pagePath": "pages/index/index",
-      "text": "Index"
-    }, {
-      "pagePath": "pages/sub/index",
-      "text": "Sub"
-    }]
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "Index"
+      },
+      {
+        "pagePath": "pages/sub/index",
+        "text": "Sub"
+      }
+    ]
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
