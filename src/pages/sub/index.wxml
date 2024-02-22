@@ -1,0 +1,1 @@
+<button bindtap="go" data-url="../../sub/pages/subpage/subpage">跳转</button>

@@ -1,7 +1,7 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/sub/index"
   ],
   "window":{
     "backgroundTextStyle":"light",
@@ -14,8 +14,8 @@
       "pagePath": "pages/index/index",
       "text": "首页"
     }, {
-      "pagePath": "pages/logs/logs",
-      "text": "日志"
+      "pagePath": "pages/sub/index",
+      "text": "分包"
     }]
   },
   "style": "v2",

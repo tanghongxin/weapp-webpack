@@ -1,7 +1,6 @@
 <!--index.wxml-->
 <view class="container">
-  <image class="" src="../../assets/module.png" />
-  <image class="" src="{{webp}}" />
-  <test />
-  <canvas id="canvas" type="2d"></canvas>
+  <view class="usermotto">
+    <text class="user-motto">Hello, webpack</text>
+  </view>
 </view>
