@@ -1,4 +1,3 @@
-<!--index.wxml-->
 <view class="container">
   <view class="usermotto">
     <text class="user-motto">Hello, webpack</text>

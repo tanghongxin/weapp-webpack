@@ -6,28 +6,28 @@
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Weixin",
+    "navigationBarTitleText": "weapp-webpack",
     "navigationBarTextStyle":"black"
   },
   "tabBar": {
     "list": [{
       "pagePath": "pages/index/index",
-      "text": "首页"
+      "text": "Index"
     }, {
       "pagePath": "pages/sub/index",
-      "text": "分包"
+      "text": "Sub"
     }]
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
   "usingComponents": {
-    "test": "components/test/test"
+    "test": "components/test/index"
   },
   "subPackages": [
     {
       "root": "sub/",
       "pages": [
-        "pages/subpage/subpage"
+        "pages/test/index"
       ]
     }
   ]
