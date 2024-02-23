@@ -2,6 +2,8 @@
   "description": "项目配置文件",
   "miniprogramRoot": "dist/",
   "compileType": "miniprogram",
+  "projectname": "weapp-webpack",
+  "libVersion": "2.25.4",
   "setting": {
     "urlCheck": false,
     "es6": true,
@@ -19,7 +21,7 @@
     "checkInvalidKey": true,
     "checkSiteMap": true,
     "uploadWithSourceMap": true,
-    "compileHotReLoad": false,
+    "compileHotReLoad": true,
     "lazyloadPlaceholderEnable": false,
     "useMultiFrameRuntime": false,
     "babelSetting": {

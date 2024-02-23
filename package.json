@@ -1,18 +1,19 @@
 {
   "name": "weapp-webpack",
   "version": "1.0.0",
-  "description": "",
+  "description": "使用 webpack 打包微信小程序",
+  "author": "hongxin.tang@hotmail.com",
+  "license": "ISC",
+  "keywords": [
+    "webpack",
+    "wx",
+    "miniprogram",
+    "weapp"
+  ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack",
     "build": "cross-env NODE_ENV=production webpack"
   },
-  "keywords": [
-    "webpack",
-    "wx",
-    "miniprogram"
-  ],
-  "author": "tanghongxin",
-  "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/generator": "^7.15.4",
@@ -24,6 +25,7 @@
     "autoprefixer": "^10.4.2",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^9.0.1",
+    "core-js": "^3.36.0",
     "cross-env": "^7.0.3",
     "ensure-posix-path": "^1.1.1",
     "file-loader": "^6.2.0",
@@ -41,6 +43,5 @@
     "webpack": "^5.69.1",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.8.0"
-  },
-  "dependencies": {}
+  }
 }
